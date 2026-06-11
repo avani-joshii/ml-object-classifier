@@ -32,13 +32,18 @@ The output of the convolutional layers is flattened into a single list of number
 # Experiments
 All three experiments were run on both datasets to observe how dataset size affects results
 ### Experiment 1- Baseline
--I initially fed the model Dataset 1.
--After training using this dataset, the training accuracy reached 100% by epoch 7 while test accuracy was just 88.24% on unseen data images, indicating the model had memorized the training data rather than learning generalizable patterns. This is called overfitting and is common with small datasets.
+- I initially fed the model Dataset 1.
+- After training using this dataset, the training accuracy reached 100% by epoch 7 while test accuracy was just 88.24% on unseen data images, indicating the model had memorized the training data rather than learning generalizable patterns. This is called overfitting and is common with small datasets.
 
 - Next, I fed the model Dataset 2, which was larger
 - After training using this dataset, the training accuracy reached 100% by epoch 7 again, with testing accuracy of 87.50%.
+- 
+| Dataset | Train Accuracy | Test Accuracy |
+|---------|---------------|---------------|
+| 1 (82 imgs) | 100% | 88.24% |
+| 2 (112 imgs) | 100% | 87.50% |
 
-Training accuracy hit 100% in both cases, meaning the model memorized the training data. This is *overfitting*, the model learned the training images too well instead of learning general patterns.
+Training accuracy hit 100% in both cases, meaning the model memorized the training data. This is *overfitting*: the model learned the training images too well rather than learning general patterns.
 
 ### Experiment 2- Dropout (rate = 0.5)
 Added a dropout layer that randomly switches off 50% of neurons during training.
@@ -56,9 +61,28 @@ Applied random flips, rotations, and brightness changes to training images.
 | 1 (82 imgs) | 95.38% | 64.71% |
 | 2 (112 imgs) | 87.50% | 79.17% |
 
-Augmentation made training unstable and reduced test accuracy, however the model with dataset 2 seemed to perform better than the smaller dataset
+## What Failed and Why
 
 
+Augmentation made training unstable and reduced test accuracy. However,the model with dataset 2 seemed to perform better than the smaller dataset
 
+## What Failed and Why
+1) Dropout with a rate of 0.5 reduced the test accuracy when I expected it to improve on both datasets. I think this might have happened because my dataset was too small. With only 65-90 training images, randomly switching off 50% of neurons meant the model had too little information to learn from each time. Dropout works better when there is more data available.
+2) Augmentation makes training harder by showing the model randomly flipped, rotated, and brightness-adjusted versions of images. With a larger dataset, it forces the model to learn more general patterns. But with only 65-90 images, the model didn't have enough examples to handle the added difficulty and got confused instead of improving
 
+The root cause for both problems was the dataset size. Both dropout and augmentation are regularization techniques that work by making training harder, but making training harder only helps when there is enough data to still learn from.
 
+## How I would improve this
+- Collect more images, ideally around 200+ images.
+- Reduce dropout rate to 0.2 instead of 0.5, which could be better for smaller datasets
+- A simpler model with fewer filters has less capacity to overfit.
+
+## Insights and Questions
+- Dropout and augmentation can actually hurt on small datasets
+- Training accuracy and test accuracy tell different stories
+- Small datasets make results inconsistent between runs
+- Bigger dataset matters more than any regularization technique.No amount of dropout or augmentation can compensate for too little data.
+
+Q) How many images would I actually need for dropout to work properly?
+Q) What other methods can I use to improve my testing and training accuracy?
+Q) What happens if I train for 50 epochs instead of 10?
