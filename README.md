@@ -7,7 +7,7 @@ A CNN image classifier that classifies 4 robotics objects:
 -Arduino Uno board 
 -Stepper Motor 
 
-I chose these 4 objects because they are all part of my robotics workspace and have distinctly different shapes. Like, a wheel is circular, a screwdriver is long and thin, an Arduino board is flat and rectangular, and a stepper motor is compact and cylindrical and has a long wire attached to it. This visual variety makes them ideal for classification since the model has clear shape differences to learn from.
+I chose these 4 objects because they are all part of my robotics workspace and have distinctly different shapes. Like, a wheel is circular, a screwdriver is long and thin, an Arduino board is flat and rectangular, and a stepper motor is compact and cylindrical and has a long wire attached to it. I picked these objects because they look quite different from each other, so I expected the model to have an easier time telling them apart.
 
 ## What the model does:
 - I fed the model a dataset of 112 images (that has around 30 images per object), out of which, 80% of the images (approximately 90 images) are used for training purposes, and 20% of the images (approximately 22 images) are used for testing.
@@ -62,15 +62,10 @@ Applied random flips, rotations, and brightness changes to training images.
 | 2 (112 imgs) | 87.50% | 79.17% |
 
 ## What Failed and Why
-
-
-Augmentation made training unstable and reduced test accuracy. However,the model with dataset 2 seemed to perform better than the smaller dataset
-
-## What Failed and Why
 1) Dropout with a rate of 0.5 reduced the test accuracy when I expected it to improve on both datasets. I think this might have happened because my dataset was too small. With only 65-90 training images, randomly switching off 50% of neurons meant the model had too little information to learn from each time. Dropout works better when there is more data available.
-2) Augmentation makes training harder by showing the model randomly flipped, rotated, and brightness-adjusted versions of images. With a larger dataset, it forces the model to learn more general patterns. But with only 65-90 images, the model didn't have enough examples to handle the added difficulty and got confused instead of improving
+2) Augmentation makes training harder and with a larger dataset, it forces the model to learn more general patterns. But with only 65-90 images, the model didn't have enough examples to handle the added difficulty and got confused instead of improving. However,the model with dataset 2 seemed to perform better than the smaller dataset
 
-The root cause for both problems was the dataset size. Both dropout and augmentation are regularization techniques that work by making training harder, but making training harder only helps when there is enough data to still learn from.
+I suspect that the small dataset size was the main reason of these problems. Both dropout and augmentation are regularization techniques that work by making training harder, but making training harder only helps when there is enough data to still learn from.
 
 ## How I would improve this
 - Collect more images, ideally around 200+ images.
@@ -81,7 +76,7 @@ The root cause for both problems was the dataset size. Both dropout and augmenta
 - Dropout and augmentation can actually hurt on small datasets
 - Training accuracy and test accuracy tell different stories
 - Small datasets make results inconsistent between runs
-- Bigger dataset matters more than any regularization technique.No amount of dropout or augmentation can compensate for too little data.
+- For my project, increasing the dataset size (as mentioned, ideally to 200+) seemed more beneficial than using dropout or augmentation alone.
 
 Q) How many images would I actually need for dropout to work properly?
 Q) What other methods can I use to improve my testing and training accuracy?
