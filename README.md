@@ -63,12 +63,12 @@ Applied random flips, rotations, and brightness changes to training images.
 
 ## What Failed and Why
 1) Dropout with a rate of 0.5 reduced the test accuracy when I expected it to improve on both datasets. I think this might have happened because my dataset was too small. With only 65-90 training images, randomly switching off 50% of neurons meant the model had too little information to learn from each time. Dropout works better when there is more data available.
-2) Augmentation makes training harder and with a larger dataset, it forces the model to learn more general patterns. But with only 65-90 images, the model didn't have enough examples to handle the added difficulty and got confused instead of improving. However,the model with dataset 2 seemed to perform better than the smaller dataset
+2) Augmentation makes training harder and with a larger dataset, it forces the model to learn more general patterns. But with only 65-90 images,the model just didn't have enough examples to benefit from the augmentation, so performance decreased instead of improving. However,the model with dataset 2 seemed to perform better than the smaller dataset
 
-I suspect that the small dataset size was the main reason of these problems. Both dropout and augmentation are regularization techniques that work by making training harder, but making training harder only helps when there is enough data to still learn from.
+I suspect that the small dataset size was the main reason for these problems. Both dropout and augmentation are regularization techniques that work by making training harder, but making training harder only helps when there is enough data to still learn from.
 
 ## How I would improve this
-- Collect more images, ideally around 200+ images.
+- Collect more images, ideally around 100 images per object/class.
 - Reduce dropout rate to 0.2 instead of 0.5, which could be better for smaller datasets
 - A simpler model with fewer filters has less capacity to overfit.
 
@@ -76,7 +76,7 @@ I suspect that the small dataset size was the main reason of these problems. Bot
 - Dropout and augmentation can actually hurt on small datasets
 - Training accuracy and test accuracy tell different stories
 - Small datasets make results inconsistent between runs
-- For my project, increasing the dataset size (as mentioned, ideally to 200+) seemed more beneficial than using dropout or augmentation alone.
+- For my project, increasing the dataset size seemed more beneficial than using dropout or augmentation alone.
 
 Q) How many images would I actually need for dropout to work properly?
 Q) What other methods can I use to improve my testing and training accuracy?
